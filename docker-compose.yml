@@ -1,0 +1,166 @@
+version: '3'
+services:
+  docker_elasticsearch_1:
+    command:
+      - eswrapper
+    container_name: docker_elasticsearch_1
+    entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - PATH=/usr/share/elasticsearch/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - ELASTIC_CONTAINER=true
+    hostname: 8ac95d11c468
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+    ipc: shareable
+    labels:
+      com.docker.compose.config-hash: 70f7e0abb1bbdaea81578f765325af0fb3ba7721394c401dd11e9f32d680a4e2
+      com.docker.compose.container-number: 1
+      com.docker.compose.oneoff: False
+      com.docker.compose.project: docker
+      com.docker.compose.service: elasticsearch
+      com.docker.compose.version: 1.24.1
+      org.label-schema.build-date: 2019-10-28T20:40:44.883016Z
+      org.label-schema.license: Elastic-License
+      org.label-schema.name: Elasticsearch
+      org.label-schema.schema-version: 1.0
+      org.label-schema.url: https://www.elastic.co/products/elasticsearch
+      org.label-schema.usage: https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+      org.label-schema.vcs-ref: 2f90bbf7b93631e52bafb59b3b049cb44ec25e96
+      org.label-schema.vcs-url: https://github.com/elastic/elasticsearch
+      org.label-schema.vendor: Elastic
+      org.label-schema.version: 7.4.2
+      org.opencontainers.image.created: 2019-10-28T20:40:44.883016Z
+      org.opencontainers.image.documentation: https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+      org.opencontainers.image.licenses: Elastic-License
+      org.opencontainers.image.revision: 2f90bbf7b93631e52bafb59b3b049cb44ec25e96
+      org.opencontainers.image.source: https://github.com/elastic/elasticsearch
+      org.opencontainers.image.title: Elasticsearch
+      org.opencontainers.image.url: https://www.elastic.co/products/elasticsearch
+      org.opencontainers.image.vendor: Elastic
+      org.opencontainers.image.version: 7.4.2
+    logging:
+      driver: json-file
+      options: {}
+    networks:
+      docker_default:
+        aliases:
+          - elasticsearch
+          - 8ac95d11c468
+    ports:
+      - 9200:9200/tcp
+    ulimits:
+      - Hard: -1
+        Name: memlock
+        Soft: -1
+    working_dir: /usr/share/elasticsearch
+  docker_kibana_1:
+    command:
+      - /usr/local/bin/kibana-docker
+    container_name: docker_kibana_1
+    entrypoint:
+      - /usr/local/bin/dumb-init
+      - --
+    environment:
+      - PATH=/usr/share/kibana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - ELASTIC_CONTAINER=true
+    hostname: 6082173c46e1
+    image: docker.elastic.co/kibana/kibana:7.4.2
+    ipc: shareable
+    labels:
+      com.docker.compose.config-hash: 08bc88b0f45fc1e57a9d17bebdaf58b9de303247b59173968b44ce5f3960aae0
+      com.docker.compose.container-number: 1
+      com.docker.compose.oneoff: False
+      com.docker.compose.project: docker
+      com.docker.compose.service: kibana
+      com.docker.compose.version: 1.24.1
+      license: 'Elastic License'
+      org.label-schema.build-date: 20190801
+      org.label-schema.license: 'Elastic License'
+      org.label-schema.name: kibana
+      org.label-schema.schema-version: 1.0
+      org.label-schema.url: https://www.elastic.co/products/kibana
+      org.label-schema.vcs-url: https://github.com/elastic/kibana
+      org.label-schema.vendor: Elastic
+      org.label-schema.version: 7.4.2
+    logging:
+      driver: json-file
+      options: {}
+    networks:
+      docker_default:
+        aliases:
+          - 6082173c46e1
+          - kibana
+    ports:
+      - 5601:5601/tcp
+    user: kibana
+    working_dir: /usr/share/kibana
+  local-redis:
+    command:
+      - redis-server
+    container_name: local-redis
+    entrypoint:
+      - docker-entrypoint.sh
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - GOSU_VERSION=1.11
+      - REDIS_VERSION=5.0.7
+      - REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-5.0.7.tar.gz
+      - REDIS_DOWNLOAD_SHA=61db74eabf6801f057fd24b590232f2f337d422280fd19486eca03be87d3a82b
+    hostname: 107ed460ab22
+    image: redis
+    ipc: private
+    logging:
+      driver: json-file
+      options: {}
+    mac_address: 02:42:ac:11:00:03
+    networks:
+      bridge:
+        aliases:
+    ports:
+      - 6379:6379/tcp
+    working_dir: /data
+  mysql_mysql57_1:
+    command:
+      - mysqld
+    container_name: mysql_mysql57_1
+    entrypoint:
+      - docker-entrypoint.sh
+    environment:
+      - MYSQL_ROOT_PASSWORD=12345678
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - GOSU_VERSION=1.7
+      - MYSQL_MAJOR=5.7
+      - MYSQL_VERSION=5.7.28-1debian9
+    hostname: 530a4e1ad37a
+    image: mysql:5.7
+    ipc: shareable
+    labels:
+      com.docker.compose.config-hash: 92448b992b36c2f558f3b08312bbfd79c6ccef5459a5f750db8a82db3d23b969
+      com.docker.compose.container-number: 1
+      com.docker.compose.oneoff: False
+      com.docker.compose.project: mysql
+      com.docker.compose.service: mysql57
+      com.docker.compose.version: 1.24.1
+    logging:
+      driver: json-file
+      options: {}
+    networks:
+      localnet:
+        aliases:
+          - 530a4e1ad37a
+          - mysql57
+          - db
+    ports:
+      - 3306:3306/tcp
+    restart: on-failure
+    volumes:
+      - mysql_mysql57data:/var/lib/mysql:rw
+version: "3"
+networks:
+  localnet:
+    external: true
+
